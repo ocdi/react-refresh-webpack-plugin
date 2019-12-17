@@ -75,7 +75,7 @@ function compileMessageHandler(message) {
 }
 
 // Registers handlers for compile errors
-createSocket(compileMessageHandler);
+createSocket(compileMessageHandler, __webpack_require__ && __webpack_require__.p);
 // Registers handlers for runtime errors
 registerErrorHandler(function handleError(error) {
   hasRuntimeErrors = true;

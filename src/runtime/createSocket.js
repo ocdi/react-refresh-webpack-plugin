@@ -16,18 +16,25 @@ if (typeof __webpack_dev_server_client__ !== 'undefined') {
  * Creates a socket server for HMR according to the user's Webpack configuration.
  * @param {function(*): void} messageHandler A handler to consume Webpack compilation messages.
  */
-function createSocket(messageHandler) {
+function createSocket(messageHandler, public_path) {
+  // we should have a public_path from webpack
+  const url = new URL(public_path || window.location.href);
+  url.pathname = '/sockjs-node';
+  const href = url.href;
+  
+
   const connection = new SocketClient(
-    // TODO: Dynamically generate this to handle resourceQuery
-    // TODO: Use resourceQuery to fix servers under proxies
-    url.format({
-      protocol: window.location.protocol,
-      hostname: window.location.hostname,
-      port: window.location.port,
-      // TODO: Support usage of custom sockets after WDS 4.0 is released
-      // Ref: https://github.com/webpack/webpack-dev-server/pull/2055
-      pathname: '/sockjs-node',
-    })
+    href
+    // // TODO: Dynamically generate this to handle resourceQuery
+    // // TODO: Use resourceQuery to fix servers under proxies
+    // url.format({
+    //   protocol: window.location.protocol,
+    //   hostname: window.location.hostname,
+    //   port: window.location.port,
+    //   // TODO: Support usage of custom sockets after WDS 4.0 is released
+    //   // Ref: https://github.com/webpack/webpack-dev-server/pull/2055
+    //   pathname: '/sockjs-node',
+    // })
   );
 
   connection.onClose(function onSocketClose() {
